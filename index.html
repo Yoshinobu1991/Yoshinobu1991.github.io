@@ -68,6 +68,59 @@
         ::-webkit-scrollbar-thumb { background: #5a0000; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
     </style>
+
+    <style>
+        .st-lights {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 0;
+            padding: 0 10%;
+        }
+        .light-wire {
+            display: flex;
+            gap: 20px;
+        }
+        .light {
+            width: 12px;
+            height: 18px;
+            border-radius: 50% 50% 10% 10%;
+            background: #fff;
+            position: relative;
+            animation: blink 2s infinite;
+        }
+        .light::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 3px;
+            width: 6px;
+            height: 5px;
+            background: #222;
+        }
+        /* Colors */
+        .light.red { background: #ff0000; box-shadow: 0 0 15px 5px #ff0000; animation-delay: 0.2s; }
+        .light.blue { background: #0088ff; box-shadow: 0 0 15px 5px #0088ff; animation-delay: 0.5s; }
+        .light.yellow { background: #ffdd00; box-shadow: 0 0 15px 5px #ffdd00; animation-delay: 0.8s; }
+        .light.green { background: #00ff00; box-shadow: 0 0 15px 5px #00ff00; animation-delay: 1.1s; }
+        .light.purple { background: #aa00ff; box-shadow: 0 0 15px 5px #aa00ff; animation-delay: 1.4s; }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; filter: brightness(0.5); }
+            50% { opacity: 1; filter: brightness(1.5); }
+        }
+        
+        @media (max-width: 768px) {
+            .st-lights { padding: 0 2%; }
+            .light { width: 8px; height: 12px; }
+            .light-wire { gap: 10px; }
+            .light::before { top: -3px; left: 2px; width: 4px; height: 3px; }
+        }
+    </style>
+
 </head>
 <body class="text-gray-300 font-sans min-h-screen">
     
