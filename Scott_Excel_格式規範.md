@@ -11,24 +11,29 @@
 
 ## 📌 格式規範與更新指南
 
-### 1. 第一頁：`Funko庫存清單` (更新售出狀態)
+### 1. 第一頁：`Funko庫存清單` (底色與排序密碼)
+
+清單中的商品必須嚴格遵守以下「分類底色」與「排序」規範：
+
+#### 【底色密碼 (PatternFill)】
+* `👑 殿堂與限定熱門款`：**淺黃色** (Hex: `FFF2CC`)
+* `📦 常規小盒`：**粉紅色** (Hex: `F4CCCC`)
+* `🦖 大型/場景組`：**淺綠色** (Hex: `D9EAD3`)
+
+#### 【排序與新增規則】
+當有新增商品、或修改分類時，整個清單必須保持**穿插排序**：
+1. 先依照「分類」排序：`👑 殿堂與限定熱門款` -> `📦 常規小盒` -> `🦖 大型/場景組`
+2. 再依照「編號大小」由小到大排序 (例如 #423 -> #424 -> #1596)。
+* 任何新增商品，都必須確保完整複製原本的垂直置中 (Alignment) 與全框線 (Border)。
+
+#### 【售出標記規則】
 當商品售出時，請依照以下格式將該商品標示為售出：
 * **【不】需要加上任何「售出」字眼**。
 * **整列反灰**：A 到 E 欄的底色必須改為灰色（Hex: `D9D9D9`）。
 * **黑色刪除線**：A 到 E 欄的文字必須加上**黑色刪除線**（Strike=True, Color="000000"），並盡量保留原本的字體大小與字型（例如微軟正黑體 11）。
+* （若商品原本有2隻但只售出1隻，則視為未售出，僅需修改商品名稱標記剩餘數量，不套用售出格式）。
 
-**Python (`openpyxl`) 實作範例**：
-```python
-gray_fill = PatternFill(start_color="D9D9D9", end_color="D9D9D9", fill_type="solid")
-for cell in row[:5]:
-    cell.fill = gray_fill
-    cell.font = Font(
-        name=cell.font.name if cell.font else '微軟正黑體',
-        size=cell.font.size if cell.font else 11,
-        strike=True,
-        color="000000"
-    )
-```
+---
 
 ### 2. 第二頁：`銷售紀錄` (新增售出訂單)
 當新增一筆售出訂單時，請將資料附加至最下方，並嚴格遵守以下格式：
@@ -40,22 +45,3 @@ for cell in row[:5]:
   * 所有新增的儲存格 (A、B、C 欄) 必須加上**黑色細實線 (thin) 的全框線**。
   * 所有新增的儲存格必須設定為**「水平與垂直置中」**，並且設定**「自動換行 (wrap_text=True)」**。
   * 字體建議使用「微軟正黑體」大小 12。
-
-**Python (`openpyxl`) 實作範例**：
-```python
-purple_fill = PatternFill(start_color="CCC0DA", end_color="CCC0DA", fill_type="solid")
-white_fill = PatternFill(start_color="FFFFFF", end_color="FFFFFF", fill_type="solid")
-thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
-center_wrap = Alignment(horizontal='center', vertical='center', wrap_text=True)
-
-# A欄: 紫色
-cell_A.fill = purple_fill
-cell_A.border = thin_border
-cell_A.alignment = center_wrap
-
-# B, C欄: 白色
-for cell in [cell_B, cell_C]:
-    cell.fill = white_fill
-    cell.border = thin_border
-    cell.alignment = center_wrap
-```
